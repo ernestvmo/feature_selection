@@ -16,9 +16,8 @@ from sklearn.model_selection import cross_val_score, train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.svm import SVC
-from sklearn.neighbors import NearestNeighbors
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.linear_model import SGDClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.naive_bayes import GaussianNB
 
@@ -39,7 +38,7 @@ BAYESIAN_ITER = 50
 
 MODELS = (
     LogisticRegression(), # Ivan
-    NearestNeighbors(), # Koen
+    KNeighborsClassifier(), # Koen
     GaussianNB(), # Ernest
     DecisionTreeClassifier(), # Ivan
     RandomForestClassifier(), # Koen
