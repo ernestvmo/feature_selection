@@ -38,13 +38,16 @@ def get_model_grid(model, path=PARAMETERS_DIR) -> Optional[dict]:
 # {"ID": dataset_id, "model": model.__class__.__name__, "cv_before": np.mean(cv_score_before),
 # "cv_after": np.mean(cv_score_after)}
 def checkpoint(row: dict, path=RESULTS_DIR, rewrite=True):
-    file_name = os.path.join(path, f'res-{row.get("dataset_id")}-{row.get("model")}') + '.json'
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+    file_name = os.path.join(path, f'res-{row.get("ID")}-{row.get("model")}') + '.json'
 
     if not rewrite and os.path.exists(file_name):
         return
 
     with open(file_name, 'w') as f:
-        json.dump(row, f)
+        json.dump(row, f, indent=1)
 
 
 def get_datasets(ids=None, random_cnt: int = 0, path=DATASETS_DIR):
@@ -94,4 +97,4 @@ def load_datasets(path=DATASETS_DIR):
 
     for dataset in datasets:
         dataset_id = dataset.dataset_id[0]
-        dataset.to_csv(os.path.join(path, f'df-{dataset_id}.csv.gz'), index=None, compression='gzip')
+        dataset.to_csv(os.path.join(path, f'df-{dataset_id}.csv.gz'), index=False, compression='gzip')
