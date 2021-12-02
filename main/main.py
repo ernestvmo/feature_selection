@@ -44,7 +44,7 @@ MODELS = (
     RandomForestClassifier(), # Koen
     MLPClassifier(), # Ernest
     GradientBoostingClassifier(), # Koen
-    # SVC(), # Ernest
+    SVC(), # Ernest
 )
 
 # DATASETS = get_datasets(random_cnt=2)
