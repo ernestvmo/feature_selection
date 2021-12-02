@@ -1,21 +1,7 @@
 {
- "max_depth": [
-  2,
-  3,
-  5,
-  10,
-  15,
-  20
- ],
- "min_samples_leaf": [
-  5,
-  10,
-  20,
-  50,
-  100
- ],
- "criterion": [
-  "gini",
-  "entropy"
- ]
+    "criterion": ["gini", "entropy"],
+    "max_depth": [1, 1000, "uniform"],
+    "min_samples_split": [1, 100, "uniform"],
+    "min_samples_leaf": [1, 100, "uniform"],
+    "max_features": ["auto", "log2"]
 }

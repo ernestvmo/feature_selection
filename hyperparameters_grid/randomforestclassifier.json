@@ -3,6 +3,6 @@
     "criterion": ["gini", "entropy"],
     "max_features": ["auto", "log2"],
     "max_depth": [1, 1000, "uniform"],
-    "min_samples_split": [0.01, 1],
-    "min_samples_leaf": [0.001, 0.5, "uniform"]
+    "min_samples_split": [1, 100, "uniform"],
+    "min_samples_leaf": [1, 100, "uniform"]
 }
