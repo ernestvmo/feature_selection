@@ -12,7 +12,7 @@ import pandas as pd
 
 from skopt import BayesSearchCV
 
-from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.model_selection import cross_val_score, train_test_split, cross_validate
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.svm import SVC
@@ -30,12 +30,12 @@ from functions import get_model_grid, get_datasets, checkpoint
 
 CV_BAYESIAN = 3
 CV_EVAL = 10
-SCORING = 'roc_auc_ovr_weighted'
+SCORING = ['accuracy', 'precision_weighted', 'recall_weighted', 'f1_weighted', 'roc_auc_ovr_weighted']
 N_JOBS = -1
 PROCESSES = 64
 RANDOM_STATE = 0xBAD
 TRAIN_SPLIT = 0.72
-BAYESIAN_ITER = 50
+BAYESIAN_ITER = 1
 
 MODELS = (
     LogisticRegression(), # Ivan
@@ -56,7 +56,7 @@ def task_generator(datasets=None, models=None):
         models = MODELS
     
     if datasets is None:
-        datasets = DATASETS
+        datasets = get_datasets(random_cnt=2)
     
     for d in datasets:
         for m in models:
@@ -104,7 +104,8 @@ def get_dataset_model_score(model2dataset_id, path, rewrite=False, verbose=1) ->
                              n_jobs=N_JOBS, cv=CV_BAYESIAN, random_state=RANDOM_STATE)
     bayesian = bayesian.fit(X_train, y_train)
     opt = bayesian.best_estimator_
-    cv_score_before = cross_val_score(opt, X, y, cv=CV_EVAL)
+    cv_score_before = cross_validate(opt, X, y, cv=CV_EVAL, scoring=SCORING)
+    cv_score_before = {k: list(v) for k, v in cv_score_before.items()}
 
     if verbose > 1:
         print('Starting feature selected Bayesian optimization')
@@ -120,10 +121,11 @@ def get_dataset_model_score(model2dataset_id, path, rewrite=False, verbose=1) ->
     bayesian = bayesian.fit(X_train, y_train)
     opt = bayesian.best_estimator_
 
-    cv_score_after = cross_val_score(opt, X, y, cv=CV_EVAL)
+    cv_score_after = cross_validate(opt, X, y, cv=CV_EVAL, scoring=SCORING)
+    cv_score_after = {k: list(v) for k, v in cv_score_after.items()}
 
     res = {"ID": int(dataset_id), "model": model.__class__.__name__,
-           "cv_before": cv_score_before.tolist(), "cv_after": cv_score_after.tolist(),
+           "cv_before": cv_score_before, "cv_after": cv_score_after,
            "time": time()-start_time}
 
     checkpoint(res, path, rewrite)
@@ -151,7 +153,8 @@ if __name__ == '__main__':
     #     models.append(i[0])
     #     datasets.append(i[1])
 
-    get_dataset_model_score(gen[0], results_folder, REWRITE, 5)
+    for i in range(20):
+        get_dataset_model_score(gen[i], results_folder, True, 5)
     from itertools import repeat
     # with Pool(PROCESSES) as p:
     #     p.starmap(get_dataset_model_score, zip(models, datasets, repeat(results_folder), repeat(REWRITE), repeat(5)))
