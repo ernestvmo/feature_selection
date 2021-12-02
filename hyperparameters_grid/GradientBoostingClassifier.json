@@ -1,0 +1,10 @@
+{
+    "learning_rate": [1e-2, 1e2],
+    "n_estimators": [1, 500],
+    "subsample": [0.1, 1],
+    "criterion": ["friedman_mse", "squared_error"],
+    "min_samples_split": [0.01, 1],
+    "min_samples_leaf": [0.001, 0.5, "uniform"],
+    "max_depth": [1, 100],
+    "tol": [1e-4, 1e-2, "log-uniform"]
+}
