@@ -1,6 +1,15 @@
 {
     "C": [1e-6, 1e+6, "log-uniform"],
+<<<<<<< HEAD
     "gamma": [1e-6, 1e+1, "log-uniform"],
     "degree": [1, 8],  
     "kernel": ["linear", "poly", "rbf"]
+=======
+    "kernel": ["linear", "poly", "rbf"],
+    "degree": [1, 3, 8],  
+    "gamma": [1e-6, 1e+1, "log-uniform"],
+    "coef0": [0, 1, "uniform"],
+    "probability": [true, false],
+    "shrinking": [true, false]
+>>>>>>> 1c3038ec950fd3a23f86c049ad716b1911e98825
 }
